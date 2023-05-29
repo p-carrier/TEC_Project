@@ -2,21 +2,22 @@ import dao.Facility;
 import dao.Zone;
 import dao.Location;
 
-import java.awt.*;
 import java.sql.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Properties;
 
 public class DataRepository {
 
     private final Connection conn;
-
     private final String database = "tec";
     private final String host = "localhost";
     private final int port = 5432;
     private final String username = "philippe";
     private final String password = "";
+    private String date;
+    private int cycle;
 
     public DataRepository() throws SQLException {
         String url = String.format("jdbc:postgresql://%s:%d/%s", host, port, database);
@@ -25,6 +26,14 @@ public class DataRepository {
         properties.setProperty("password", password);
 
         conn = DriverManager.getConnection(url, properties);
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public void setCycle(int cycle) {
+        this.cycle = cycle;
     }
 
     public void saveAllLocations(ArrayList<dto.Location> locations) {
@@ -45,6 +54,8 @@ public class DataRepository {
             PreparedStatement insertLocation = conn.prepareStatement(
                     """
                         INSERT INTO Facilities VALUES(
+                            ?,
+                            ?,
                             (
                                 SELECT loc
                                 FROM Locations
@@ -53,23 +64,21 @@ public class DataRepository {
                             ?,?,?,?,?,?,?,?,?,?,?,?
                         )
                     """);
-            insertLocation.setString(1, facility.getLocName());
-            insertLocation.setObject(2, facility.getLocPurpDesc(), Types.OTHER);
-            insertLocation.setObject(3, facility.getLocQty(), Types.OTHER);
-            insertLocation.setObject(4, facility.getFlowInd(), Types.OTHER);
-            insertLocation.setInt(5, facility.getDc());
-            insertLocation.setInt(6, facility.getOpc());
-            insertLocation.setInt(7, facility.getTsq());
-            insertLocation.setInt(8, facility.getOac());
-            insertLocation.setBoolean(9, facility.isIt());
-            insertLocation.setBoolean(10, facility.isAuthOverrunInd());
-            insertLocation.setBoolean(11, facility.isNomCapExceedInd());
-            insertLocation.setBoolean(12, facility.isAllQtyAvail());
-            if (facility.getQtyReason().equals("\r")) {
-                insertLocation.setNull(13, Types.NULL);
-            } else {
-                insertLocation.setString(13, facility.getQtyReason());
-            }
+            insertLocation.setDate(1, new Date((new SimpleDateFormat("MM/dd/yyy").parse(date)).getTime()));
+            insertLocation.setInt(2, cycle);
+            insertLocation.setString(3, facility.getLocName());
+            insertLocation.setObject(4, facility.getLocPurpDesc(), Types.OTHER);
+            insertLocation.setObject(5, facility.getLocQty(), Types.OTHER);
+            insertLocation.setObject(6, facility.getFlowInd(), Types.OTHER);
+            checkNullInt(insertLocation, 7, facility.getDc());
+            checkNullInt(insertLocation, 8, facility.getOpc());
+            checkNullInt(insertLocation, 9, facility.getTsq());
+            checkNullInt(insertLocation, 10, facility.getOac());
+            insertLocation.setBoolean(11, facility.isIt());
+            insertLocation.setBoolean(12, facility.isAuthOverrunInd());
+            insertLocation.setBoolean(13, facility.isNomCapExceedInd());
+            insertLocation.setBoolean(14, facility.isAllQtyAvail());
+            insertLocation.setString(15, facility.getQtyReason());
 
             final int result = insertLocation.executeUpdate();
 
@@ -77,12 +86,23 @@ public class DataRepository {
 
             return result > 0;
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            return false;
+        } catch (ParseException e) {
+            System.out.println("Enter correct date formatted as MM/dd/yyyy");
+            System.exit(1);
             return false;
         }
     }
 
-    public boolean saveZone(Zone zone) {
+    private void checkNullInt(PreparedStatement statement, int index, int value) throws SQLException {
+        if (value < 0) {
+            statement.setNull(index, Types.NULL);
+        } else {
+            statement.setInt(index, value);
+        }
+    }
+
+    public void saveZone(Zone zone) {
         try {
             PreparedStatement insertZone = conn.prepareStatement(
                     """
@@ -92,13 +112,11 @@ public class DataRepository {
                     """);
             insertZone.setString(1, zone.getLocZn());
 
-            final int result = insertZone.executeUpdate();
+            insertZone.executeUpdate();
             insertZone.close();
 
-            return result > 0;
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
-            return false;
+            System.out.println(e.getMessage());
         }
     }
 

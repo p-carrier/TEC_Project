@@ -3,6 +3,7 @@ import dto.Location;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -13,13 +14,15 @@ import java.util.stream.Collectors;
 public class DataController {
     private static final String uri = "https://twtransfer.energytransfer.com/ipost/capacity/operationally-available";
 
-    private static String buildUri() {
-        return uri + "?f=csv&extension=csv&asset=TW&gasDay=08%2F09%2F2022&cycle=5&searchType=NOM&searchString=&locType=ALL&locZone=ALL";
+    private static String buildUri(String gasDay, int cycle) {
+        return uri + String.format("?f=csv&extension=csv&asset=TW&gasDay=%s&cycle=%d&searchType=NOM&searchString=&locType=ALL&locZone=ALL", URLEncoder.encode(gasDay), cycle);
     }
 
-    public static ArrayList<Location> fetchData() throws URISyntaxException, IOException, InterruptedException {
+    public static ArrayList<Location> fetchData(String day, int cycle) throws URISyntaxException, IOException, InterruptedException {
+        final String uri = buildUri(day, cycle);
+        System.out.println(uri);
         final HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI(buildUri()))
+                .uri(new URI(uri))
                 .GET()
                 .build();
 

@@ -3,7 +3,6 @@ package dto;
 import dao.Facility;
 import dao.Zone;
 
-import java.util.Arrays;
 import java.util.HashMap;
 
 public class Location {
@@ -64,11 +63,14 @@ public class Location {
     }
 
     private int formatNumber(String value) {
+        if (value.equals("")) {
+            return -1;
+        }
         return Integer.parseInt(removeQuotes(value));
     }
 
     private String formatString(String value) {
-        return removeQuotes(value);
+        return removeQuotes(value).replaceAll("\r", "");
     }
 
     private final HashMap<String, Boolean> boolValues = new HashMap<>(){{
@@ -154,10 +156,6 @@ public class Location {
 
     public String getQtyReason() {
         return qtyReason;
-    }
-
-    public HashMap<String, Boolean> getBoolValues() {
-        return boolValues;
     }
 
     @Override

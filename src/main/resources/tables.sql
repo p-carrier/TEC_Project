@@ -1,6 +1,6 @@
 CREATE TABLE Zones (
    id SERIAL PRIMARY KEY,
-   locZn TEXT
+   locZn TEXT UNIQUE
 );
 
 CREATE TABLE Locations (
@@ -14,6 +14,8 @@ CREATE TYPE loc_qty_types AS ENUM('RPQ', 'DPQ');
 CREATE TYPE flow_ind_types AS ENUM('R', 'D');
 
 CREATE TABLE Facilities (
+    gasDay DATE,
+    cycle INT,
     loc INT REFERENCES Locations(loc) NOT NULL,
     loc_purpose_desc loc_purp_desc_types,
     loc_QTI loc_qty_types,
@@ -27,5 +29,5 @@ CREATE TABLE Facilities (
     nom_cap_exceed_ind BOOL,
     all_qty_available BOOL,
     qty_reason TEXT,
-    PRIMARY KEY (loc, loc_purpose_desc)
+    PRIMARY KEY (gasDay, cycle, loc, loc_purpose_desc)
 );

@@ -74,7 +74,7 @@ class LocationTest {
 
         final Facility facility = location.extractFacility();
 
-        assertEquals(location.getLoc(), facility.getLoc());
+        assertEquals(location.getLocName(), facility.getLocName());
         assertEquals(location.getLocPurpDesc(), facility.getLocPurpDesc());
         assertEquals(location.getLocQti(), facility.getLocQty());
         assertEquals(location.getFlowInd(), facility.getFlowInd());

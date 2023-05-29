@@ -1,9 +1,6 @@
 import dto.Location;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.MockedStatic;
-import org.mockito.exceptions.base.MockitoException;
 
 import java.io.IOException;
 import java.net.URI;
@@ -18,7 +15,7 @@ import static org.mockito.Mockito.*;
 
 class DataControllerTest {
 
-    private final String uri = "https://twtransfer.energytransfer.com/ipost/capacity/operationally-available?f=csv&extension=csv&asset=TW&gasDay=08%2F09%2F2022&cycle=5&searchType=NOM&searchString=&locType=ALL&locZone=ALL";
+    private final String uri = "https://twtransfer.energytransfer.com/ipost/capacity/operationally-available?f=csv&extension=csv&asset=TW&gasDay=08%2F09%2F2022&cycle=4&searchType=NOM&searchString=&locType=ALL&locZone=ALL";
 
     @Test
     void itFetchDataToTheCorrectWebsiteUri() throws URISyntaxException, IOException, InterruptedException {
@@ -36,7 +33,7 @@ class DataControllerTest {
         try (MockedStatic<HttpClient> mockStaticClient = mockStatic(HttpClient.class)) {
             mockStaticClient.when(HttpClient::newHttpClient).thenReturn(mockClient);
 
-            DataController.fetchData();
+            DataController.fetchData("08/09/2022", 4);
             verify(mockClient).send(eq(request), any());
         }
     }
@@ -56,10 +53,10 @@ class DataControllerTest {
         try (MockedStatic<HttpClient> mockStaticClient = mockStatic(HttpClient.class)) {
             mockStaticClient.when(HttpClient::newHttpClient).thenReturn(mockClient);
 
-            final String[] result = DataController.fetchData().stream().map(Location::toString).toArray(String[]::new);
+            final String[] result = DataController.fetchData("08/09/2022", 5).stream().map(Location::toString).toArray(String[]::new);
             final String[] expected = new ArrayList<Location>() {{
-                add(new Location(100734, "'WEST TEXAS'", "'3 BEAR LEA'", "'M2'","'RPQ'","'R'",40000,60000,45475,14525, true,false,false,true,"''"));
-                add(new Location(60152,"'CENTRAL'","'ABO FUEL DEL'","'MQ'","'DPQ'","'D'",5000,5000,1100,3900,true,false,false,true,"''"));
+                add(new Location(100734, "WEST TEXAS", "3 BEAR LEA", "M2","RPQ","R",40000,60000,45475,14525, true,false,false,true,""));
+                add(new Location(60152,"CENTRAL","ABO FUEL DEL","MQ","DPQ","D",5000,5000,1100,3900,true,false,false,true,""));
             }}.stream().map(Location::toString).toArray(String[]::new);
 
             assertArrayEquals(expected, result);
