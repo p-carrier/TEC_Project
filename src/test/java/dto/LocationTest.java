@@ -1,11 +1,10 @@
 package dto;
 
+import dao.Facility;
+import dao.Zone;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.params.provider.ValueSource;
-
-import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -44,5 +43,49 @@ class LocationTest {
         final String[] info = lines[i].split(",");
         final Location location = new Location(info);
         assertEquals(expected, location.isIt());
+    }
+
+    @Test
+    void itExtractTheZoneInformationIntoItsOwnObject() {
+        final String[] info = lines[0].split(",");
+        final Location location = new Location(info);
+
+        final Zone zone = location.extractZone();
+
+        assertEquals(location.getLocZn(), zone.getLocZn());
+    }
+
+    @Test
+    void itExtractTheLocationInformationIntoItsOwnObject() {
+        final String[] info = lines[0].split(",");
+        final Location location = new Location(info);
+
+        final dao.Location locationDao = location.extractLocation();
+
+        assertEquals(location.getLoc(), locationDao.getLoc());
+        assertEquals(location.getLocName(), locationDao.getLocName());
+        assertEquals(location.getLocZn(), locationDao.getLocZn());
+    }
+
+    @Test
+    void itExtractTheFacilityInformationIntoItsOwnObject() {
+        final String[] info = lines[0].split(",");
+        final Location location = new Location(info);
+
+        final Facility facility = location.extractFacility();
+
+        assertEquals(location.getLoc(), facility.getLoc());
+        assertEquals(location.getLocPurpDesc(), facility.getLocPurpDesc());
+        assertEquals(location.getLocQti(), facility.getLocQty());
+        assertEquals(location.getFlowInd(), facility.getFlowInd());
+        assertEquals(location.getDc(), facility.getDc());
+        assertEquals(location.getOpc(), facility.getOpc());
+        assertEquals(location.getTsq(), facility.getTsq());
+        assertEquals(location.getOac(), facility.getOac());
+        assertEquals(location.isIt(), facility.isIt());
+        assertEquals(location.isAuthOverrunInd(), facility.isAuthOverrunInd());
+        assertEquals(location.isNomCapExceedInd(), facility.isNomCapExceedInd());
+        assertEquals(location.isAllQtyAvail(), facility.isAllQtyAvail());
+        assertEquals(location.getQtyReason(), facility.getQtyReason());
     }
 }

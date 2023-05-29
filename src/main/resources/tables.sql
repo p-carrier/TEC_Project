@@ -6,7 +6,7 @@ CREATE TABLE Zones (
 CREATE TABLE Locations (
    loc INTEGER PRIMARY KEY,
    locName TEXT,
-   locZn INT REFERENCES Zones(id)
+   locZn INT REFERENCES Zones(id) NOT NULL
 );
 
 CREATE TYPE loc_purp_desc_types AS ENUM('MQ', 'M2');
@@ -14,7 +14,7 @@ CREATE TYPE loc_qty_types AS ENUM('RPQ', 'DPQ');
 CREATE TYPE flow_ind_types AS ENUM('R', 'D');
 
 CREATE TABLE Facilities (
-    loc INT REFERENCES Locations(loc),
+    loc INT REFERENCES Locations(loc) NOT NULL,
     loc_purpose_desc loc_purp_desc_types,
     loc_QTI loc_qty_types,
     flow_ind flow_ind_types,

@@ -1,5 +1,8 @@
 package dto;
 
+import dao.Facility;
+import dao.Zone;
+
 import java.util.Arrays;
 import java.util.HashMap;
 
@@ -65,7 +68,7 @@ public class Location {
     }
 
     private String formatString(String value) {
-        return value.replaceAll("\"", "'");
+        return removeQuotes(value);
     }
 
     private final HashMap<String, Boolean> boolValues = new HashMap<>(){{
@@ -75,6 +78,22 @@ public class Location {
 
     private boolean formatBoolean(String value) {
         return boolValues.get(value);
+    }
+
+    public Zone extractZone() {
+        return new Zone(this.locZn);
+    }
+
+    public dao.Location extractLocation() {
+        return new dao.Location(this.loc, this.locName, this.locZn);
+    }
+
+    public Facility extractFacility() {
+        return new Facility(
+                locName, locPurpDesc, locQti, flowInd, dc, opc, tsq,
+                oac, it, authOverrunInd, nomCapExceedInd,
+                allQtyAvail, qtyReason
+        );
     }
 
     public int getLoc() {
@@ -87,6 +106,58 @@ public class Location {
 
     public boolean isIt() {
         return it;
+    }
+
+    public String getLocName() {
+        return locName;
+    }
+
+    public String getLocPurpDesc() {
+        return locPurpDesc;
+    }
+
+    public String getLocQti() {
+        return locQti;
+    }
+
+    public String getFlowInd() {
+        return flowInd;
+    }
+
+    public int getDc() {
+        return dc;
+    }
+
+    public int getOpc() {
+        return opc;
+    }
+
+    public int getTsq() {
+        return tsq;
+    }
+
+    public int getOac() {
+        return oac;
+    }
+
+    public boolean isAuthOverrunInd() {
+        return authOverrunInd;
+    }
+
+    public boolean isNomCapExceedInd() {
+        return nomCapExceedInd;
+    }
+
+    public boolean isAllQtyAvail() {
+        return allQtyAvail;
+    }
+
+    public String getQtyReason() {
+        return qtyReason;
+    }
+
+    public HashMap<String, Boolean> getBoolValues() {
+        return boolValues;
     }
 
     @Override
