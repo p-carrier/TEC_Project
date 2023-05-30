@@ -1,0 +1,41 @@
+version: "3.9"
+services:
+  extractor:
+    image: tec_project/extractor
+    build: ./
+    environment:
+      DATABASE_USER: postgres
+      DATABASE_PASSWORD: password
+      DATABASE_NAME: tec
+      DATABASE_HOST: database
+      DATABASE_PORT: 5432
+    ports:
+      - "5000:5000"
+    networks:
+      - database-network
+    depends_on:
+      database:
+        condition: service_healthy
+
+  database:
+    image: postgres
+    restart: always
+    ports:
+      - "15432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: tec
+    volumes:
+      - ./src/main/resources/tables.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - database-network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+networks:
+  database-network:
+    driver: bridge

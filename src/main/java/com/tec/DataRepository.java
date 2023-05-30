@@ -13,15 +13,15 @@ import java.util.Properties;
 public class DataRepository {
 
     private final Connection conn;
-    private final String database = "tec"; //System.getenv("DATABASE_NAME");
-    private final String host = "localhost"; //System.getenv("DATABASE_HOST");
-    private final int port = 15432; //Integer.parseInt(System.getenv("DATABASE_PORT"));
-    private final String username = "postgres"; //System.getenv("DATABASE_USER");
-    private final String password = "password"; //System.getenv("DATABASE_PASSWORD");
+    private final String database = System.getenv("DATABASE_NAME");
+    private final String host = System.getenv("DATABASE_HOST");
+    private final int port = Integer.parseInt(System.getenv("DATABASE_PORT"));
+    private final String username = System.getenv("DATABASE_USER");
+    private final String password = System.getenv("DATABASE_PASSWORD");
     private String date;
     private int cycle;
 
-    public DataRepository() throws SQLException, ClassNotFoundException {
+    public DataRepository() throws SQLException {
         String url = String.format("jdbc:postgresql://%s:%d/%s", host, port, database);
         Properties properties = new Properties();
         properties.setProperty("user", username);
