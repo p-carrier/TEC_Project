@@ -1,4 +1,6 @@
-import dto.Location;
+package com.tec;
+
+import com.tec.dto.Location;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -7,7 +9,7 @@ import java.util.ArrayList;
 import java.util.stream.IntStream;
 
 public class DataExtractor {
-    public static void main(String[] args) throws URISyntaxException, IOException, InterruptedException, SQLException {
+    public static void main(String[] args) throws URISyntaxException, IOException, InterruptedException, SQLException, ClassNotFoundException {
         DataRepository repository = new DataRepository();
 
         for (String date: new String[]{Day.getTodayDate(), Day.getYesterdayDate(), Day.getBeforeYesterdayDate()}) {

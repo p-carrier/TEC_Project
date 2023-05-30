@@ -1,7 +1,7 @@
-package dto;
+package com.tec.dto;
 
-import dao.Facility;
-import dao.Zone;
+import com.tec.dao.Facility;
+import com.tec.dao.Zone;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -34,7 +34,7 @@ class LocationTest {
     void itFormatStringValueIntoStringWithSingleQuotes(int i, String expected) {
         final String[] info = lines[i].split(",");
         final Location location = new Location(info);
-        assertEquals("'" + expected + "'", location.getLocZn());
+        assertEquals(expected, location.getLocZn());
     }
 
     @ParameterizedTest
@@ -60,7 +60,7 @@ class LocationTest {
         final String[] info = lines[0].split(",");
         final Location location = new Location(info);
 
-        final dao.Location locationDao = location.extractLocation();
+        final com.tec.dao.Location locationDao = location.extractLocation();
 
         assertEquals(location.getLoc(), locationDao.getLoc());
         assertEquals(location.getLocName(), locationDao.getLocName());
@@ -75,9 +75,9 @@ class LocationTest {
         final Facility facility = location.extractFacility();
 
         assertEquals(location.getLocName(), facility.getLocName());
-        assertEquals(location.getLocPurpDesc(), facility.getLocPurpDesc());
-        assertEquals(location.getLocQti(), facility.getLocQty());
-        assertEquals(location.getFlowInd(), facility.getFlowInd());
+        assertEquals(location.getLocPurpDesc(), String.valueOf(facility.getLocPurpDesc()));
+        assertEquals(location.getLocQti(), String.valueOf(facility.getLocQty()));
+        assertEquals(location.getFlowInd(), String.valueOf(facility.getFlowInd()));
         assertEquals(location.getDc(), facility.getDc());
         assertEquals(location.getOpc(), facility.getOpc());
         assertEquals(location.getTsq(), facility.getTsq());

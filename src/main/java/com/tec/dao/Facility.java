@@ -1,4 +1,4 @@
-package dao;
+package com.tec.dao;
 
 import java.util.HashMap;
 

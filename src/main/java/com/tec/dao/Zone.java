@@ -1,4 +1,4 @@
-package dao;
+package com.tec.dao;
 
 public class Zone {
     final private String locZn;

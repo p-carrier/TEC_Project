@@ -1,4 +1,5 @@
-import dto.Location;
+import com.tec.DataController;
+import com.tec.dto.Location;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 

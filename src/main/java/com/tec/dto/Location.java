@@ -1,7 +1,7 @@
-package dto;
+package com.tec.dto;
 
-import dao.Facility;
-import dao.Zone;
+import com.tec.dao.Facility;
+import com.tec.dao.Zone;
 
 import java.util.HashMap;
 
@@ -86,8 +86,8 @@ public class Location {
         return new Zone(this.locZn);
     }
 
-    public dao.Location extractLocation() {
-        return new dao.Location(this.loc, this.locName, this.locZn);
+    public com.tec.dao.Location extractLocation() {
+        return new com.tec.dao.Location(this.loc, this.locName, this.locZn);
     }
 
     public Facility extractFacility() {

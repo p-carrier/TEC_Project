@@ -1,6 +1,8 @@
-import dao.Facility;
-import dao.Zone;
-import dao.Location;
+package com.tec;
+
+import com.tec.dao.Facility;
+import com.tec.dao.Zone;
+import com.tec.dao.Location;
 
 import java.sql.*;
 import java.text.ParseException;
@@ -11,15 +13,15 @@ import java.util.Properties;
 public class DataRepository {
 
     private final Connection conn;
-    private final String database = "tec";
-    private final String host = "localhost";
-    private final int port = 5432;
-    private final String username = "philippe";
-    private final String password = "";
+    private final String database = "tec"; //System.getenv("DATABASE_NAME");
+    private final String host = "localhost"; //System.getenv("DATABASE_HOST");
+    private final int port = 15432; //Integer.parseInt(System.getenv("DATABASE_PORT"));
+    private final String username = "postgres"; //System.getenv("DATABASE_USER");
+    private final String password = "password"; //System.getenv("DATABASE_PASSWORD");
     private String date;
     private int cycle;
 
-    public DataRepository() throws SQLException {
+    public DataRepository() throws SQLException, ClassNotFoundException {
         String url = String.format("jdbc:postgresql://%s:%d/%s", host, port, database);
         Properties properties = new Properties();
         properties.setProperty("user", username);
@@ -36,7 +38,7 @@ public class DataRepository {
         this.cycle = cycle;
     }
 
-    public void saveAllLocations(ArrayList<dto.Location> locations) {
+    public void saveAllLocations(ArrayList<com.tec.dto.Location> locations) {
         locations.forEach(location -> {
             if (saveFacility(location.extractFacility())) {
             } else if (saveLocation(location.extractLocation())) {

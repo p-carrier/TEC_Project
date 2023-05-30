@@ -1,3 +1,4 @@
+import com.tec.Day;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;

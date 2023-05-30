@@ -1,4 +1,6 @@
-import dto.Location;
+package com.tec;
+
+import com.tec.dto.Location;
 
 import java.io.IOException;
 import java.net.URI;
